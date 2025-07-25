@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-#l1x!=f#a*-3e2s1^c18s@y87@$4q=5d%m-79v8ri^jvnp9fn^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('APP_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -75,22 +79,26 @@ WSGI_APPLICATION = 'apps.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+DEFAULT_DATABASE = {
+    'ENGINE': os.getenv('DEFAULT_DB_ENGINE', 'django.db.backends.sqlite3'),
+    'NAME': os.getenv('DEFAULT_DB_NAME', 'DJANGO-LEARNING'),
+    'USER': os.getenv('DEFAULT_DB_USER', 'sa'),
+    'PASSWORD': os.getenv('DEFAULT_DB_PASSWORD', ''),
+    'HOST': os.getenv('DEFAULT_DB_HOST', 'localhost'),
+    'PORT': os.getenv('DEFAULT_DB_PORT', '1433'),
+}
+
+if os.getenv('DEFAULT_DB_DRIVER'):
+    DEFAULT_DATABASE['OPTIONS'] = {
+        'driver': os.getenv('DEFAULT_DB_DRIVER', 'ODBC Driver 17 for SQL Server'),
+    }
+
 DATABASES = {
     'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
-    'default': {
-        'ENGINE': 'mssql',
-        'NAME': 'DJANGO-LEARNING',
-        'USER': 'sa',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '1433',
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
-        },
-    }
+    'default': DEFAULT_DATABASE
 }
 
 
@@ -119,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = os.getenv('TIME_ZONE', 'UTC')
 
 USE_I18N = True
 
