@@ -1,4 +1,4 @@
-# DJANGO Learning
+# Django Learning
 
 ## Initial Setup
 
