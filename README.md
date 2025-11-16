@@ -42,3 +42,6 @@ python manage.py runserver
 pip install -r requirements.txt
 pip freeze > requirements.txt
 ```
+
+## References
+- https://medium.com/@mihaicorciu/django-default-built-in-user-authentication-system-fba5899b067f   
