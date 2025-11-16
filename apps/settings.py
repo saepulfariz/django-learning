@@ -82,11 +82,16 @@ WSGI_APPLICATION = 'apps.wsgi.application'
 DEFAULT_DATABASE = {
     'ENGINE': os.getenv('DEFAULT_DB_ENGINE', 'django.db.backends.sqlite3'),
     'NAME': os.getenv('DEFAULT_DB_NAME', 'DJANGO-LEARNING'),
-    'USER': os.getenv('DEFAULT_DB_USER', 'sa'),
-    'PASSWORD': os.getenv('DEFAULT_DB_PASSWORD', ''),
-    'HOST': os.getenv('DEFAULT_DB_HOST', 'localhost'),
-    'PORT': os.getenv('DEFAULT_DB_PORT', '1433'),
 }
+
+if os.getenv('DEFAULT_DB_ENGINE') != 'django.db.backends.sqlite3':
+    DEFAULT_DATABASE['USER'] = os.getenv('DEFAULT_DB_USER', 'sa')
+    DEFAULT_DATABASE['PASSWORD'] = os.getenv('DEFAULT_DB_PASSWORD', '')
+    DEFAULT_DATABASE['HOST'] = os.getenv('DEFAULT_DB_HOST', 'localhost')
+    DEFAULT_DATABASE['PORT'] = os.getenv('DEFAULT_DB_PORT', '1433')
+elif os.getenv('DEFAULT_DB_ENGINE') == 'django.db.backends.sqlite3':
+    DEFAULT_DATABASE['NAME'] = BASE_DIR / os.getenv('DEFAULT_DB_NAME', 'sqlite.db')
+
 
 if os.getenv('DEFAULT_DB_DRIVER'):
     DEFAULT_DATABASE['OPTIONS'] = {
